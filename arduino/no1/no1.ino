@@ -17,7 +17,10 @@ uint64_t address = 0xF0F0F0F0E1LL;
 
 void setup()
 {
+  // Inicializa a comunicação serial
   Serial.begin(115200);
+
+  // Inicializa o rádio
   radio.begin();
   radio.setPALevel(RF24_PA_LOW);
   radio.setChannel(100);
@@ -26,29 +29,36 @@ void setup()
   radio.openWritingPipe(address);
   radio.openReadingPipe(1, address);
   radio.startListening();
+
+  // Configura os pinos
   pinMode(LED_VERDE, OUTPUT);
   pinMode(LED_VERMELHO, OUTPUT);
 }
 
 void loop()
 {
-  int umidade = random(0, 101); // random umidade
+  // Lê o valor do sensor de umidade no pino A0
+  int umidade = analogRead(A0);
 
+  // Normaliza o valor de 0-1023 para 0-100 (percentual de umidade)
+  umidade = map(umidade, 0, 1023, 100, 0);
+
+  // Controle dos LEDs baseado no valor da umidade
   if (umidade <= 60)
   {
-    digitalWrite(LED_VERMELHO, HIGH);
-    digitalWrite(LED_VERDE, LOW);
+    digitalWrite(LED_VERMELHO, HIGH);  // LED vermelho aceso
+    digitalWrite(LED_VERDE, LOW);      // LED verde apagado
   }
   else
   {
-    digitalWrite(LED_VERMELHO, LOW);
-    digitalWrite(LED_VERDE, HIGH);
+    digitalWrite(LED_VERMELHO, LOW);   // LED vermelho apagado
+    digitalWrite(LED_VERDE, HIGH);     // LED verde aceso
   }
 
   // Estrutura da mensagem: [tipo msg, valor da umidade]
   int mensagem[2] = {MSG, umidade};
 
-  // envia a mensagem e o valor da umidade
+  // Envia a mensagem e o valor da umidade
   radio.stopListening();
   bool report = radio.write(&mensagem, sizeof(mensagem));
   radio.startListening();
@@ -87,5 +97,6 @@ void loop()
     Serial.println(F("Falha na transmissão"));
   }
 
+  // Atraso de 5 segundos antes da próxima leitura
   delay(5000);
 }
