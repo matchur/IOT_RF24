@@ -7,7 +7,7 @@ Desenvolvimento de uma aplicação IoT utilizando Arduino Nano e módulos de rá
     - 1 nó gateway.
     - 2 nós que trocam dados entre si.
     
-    <img src="src/req1.png" alt="diagrama_trab">
+    <img src="src/diagram_1.png" alt="diagrama_trab">
 - Definir um protocolo de comunicação adequado à aplicação escolhida.
 - Exibir os dados coletados ou permitir o controle dos nós por meio de uma interface web.
 
