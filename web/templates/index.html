@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Umidade</title>
+    <script>
+        async function atualizarUmidade() {
+            try {
+                const response = await fetch('/umidade');
+                const data = await response.json();
+                document.getElementById('umidade').innerText = `Umidade recebida: ${data.umidade}%`;
+            } catch (error) {
+                console.error('Erro ao atualizar umidade:', error);
+            }
+        }
+
+
+        setInterval(atualizarUmidade, 2000);
+        window.onload = atualizarUmidade;
+    </script>
+</head>
+<body>
+    <h1>Monitor de Umidade</h1>
+    <p id="umidade">Carregando umidade...</p>
+</body>
+</html>
